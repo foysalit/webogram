@@ -20,6 +20,7 @@ angular.module('myApp', [
   'ui.bootstrap',
   'mediaPlayer',
   'toaster',
+  'camera',
   'izhukov.utils',
   'izhukov.mtproto',
   'izhukov.mtproto.wrapper',

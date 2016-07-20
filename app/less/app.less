@@ -2632,6 +2632,37 @@ img.img_fullsize {
   }
 }
 
+/* Picture upload modal */
+.picture_modal_body_wrap {
+  text-align: right;
+}
+
+.picture_modal_wrap {
+  .picture_media_attach {
+    cursor: pointer;
+    display: block;
+    overflow: hidden;
+    position: relative;
+
+    .picture_media_attach_input {
+      cursor: pointer;
+      font-size: 120px !important;
+      opacity: 0.01;
+      position: absolute;
+      z-index: 100;
+      margin: 0;
+      padding: 0;
+      top: 0;
+      right: 0;
+    }
+  }
+
+  video {
+    display: block;
+    margin: 0 auto;
+  }
+}
+
 /* Message composer */
 .composer_progress_enabled-add,
 .composer_progress_enabled-remove {

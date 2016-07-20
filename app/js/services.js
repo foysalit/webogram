@@ -1324,6 +1324,25 @@ angular.module('myApp.services', ['myApp.i18n', 'izhukov.utils'])
     }
   })
 
+  .service('AppPictureManager', function ($modal, $window, $rootScope) {
+
+    function openPictureModal () {
+      var scope = $rootScope.$new(true)
+      var modalInstance = $modal.open({
+        templateUrl: templateUrl('picture_modal'),
+        controller: 'PictureModalController',
+        scope: scope,
+        windowClass: 'picture_modal_window'
+      })
+
+      return modalInstance
+    }
+
+    return {
+      openPictureModal: openPictureModal
+    }
+  })
+
   .service('AppPhotosManager', function ($modal, $window, $rootScope, MtpApiManager, MtpApiFileManager, AppUsersManager, FileManager) {
     var photos = {}
     var windowW = $(window).width()

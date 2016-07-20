@@ -218,8 +218,10 @@
                       </div>
 
                       <div class="im_media_attach pull-left">
-                        <input type="file" class="im_media_attach_input" size="28" multiple="multiple" accept="image/*, video/*, audio/*" title="{{'im_media_attach_title' | i18n}}"/>
-                        <i class="icon icon-camera"></i>
+                        <!-- <input type="file" class="im_media_attach_input" size="28" multiple="multiple" accept="image/*, video/*, audio/*" title="{{'im_media_attach_title' | i18n}}"/> -->
+                        <a ng-click="openPictureModal()" title="{{'im_media_attach_title' | i18n}}">
+                          <i class="icon icon-camera"></i>
+                        </a>
                       </div>
 
                       <div class="composer_emoji_panel"></div>

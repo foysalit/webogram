@@ -82,6 +82,10 @@
 	"settings_modal_password_email_pending_cancel": "Abort",
 	"settings_modal_password_email_pending_cancel_mobile": "Abort password",
 
+	"picture_modal_title": "Capture or Upload Picture",
+	"picture_upload_from_file_button": "From Desktop",
+	"picture_upload": "Upload",
+
 	"password_delete_title": "Turn password off",
 	"password_change_title": "Two-Step Verification",
 	"password_current_placeholder": "Enter current password",

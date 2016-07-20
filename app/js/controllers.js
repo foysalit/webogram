@@ -437,7 +437,7 @@ angular.module('myApp.controllers', ['myApp.i18n'])
     LayoutSwitchService.start()
   })
 
-  .controller('AppIMController', function ($q, qSync, $scope, $location, $routeParams, $modal, $rootScope, $modalStack, MtpApiManager, AppUsersManager, AppChatsManager, AppMessagesManager, AppPeersManager, ContactsSelectService, ChangelogNotifyService, ErrorService, AppRuntimeManager, HttpsMigrateService, LayoutSwitchService, LocationParamsService, AppStickersManager) {
+  .controller('AppIMController', function ($q, qSync, $scope, $location, $routeParams, $modal, $rootScope, $modalStack, MtpApiManager, AppUsersManager, AppPhotosManager, AppChatsManager, AppMessagesManager, AppPeersManager, ContactsSelectService, ChangelogNotifyService, ErrorService, AppRuntimeManager, HttpsMigrateService, LayoutSwitchService, LocationParamsService, AppStickersManager) {
     $scope.$on('$routeUpdate', updateCurDialog)
 
     var pendingParams = false
@@ -2180,7 +2180,7 @@ angular.module('myApp.controllers', ['myApp.i18n'])
     $scope.$on('user_update', angular.noop)
   })
 
-  .controller('AppImSendController', function ($rootScope, $q, $scope, $timeout, MtpApiManager, Storage, AppProfileManager, AppChatsManager, AppUsersManager, AppPeersManager, AppDocsManager, AppMessagesManager, AppInlineBotsManager, MtpApiFileManager, DraftsManager, RichTextProcessor) {
+  .controller('AppImSendController', function ($rootScope, $q, $scope, $timeout, MtpApiManager, Storage, AppPictureManager, AppProfileManager, AppChatsManager, AppUsersManager, AppPeersManager, AppDocsManager, AppMessagesManager, AppInlineBotsManager, MtpApiFileManager, DraftsManager, RichTextProcessor) {
     $scope.$watch('curDialog.peer', resetDraft)
     $scope.$on('user_update', angular.noop)
     $scope.$on('peer_draft_attachment', applyDraftAttachment)
@@ -2238,6 +2238,13 @@ angular.module('myApp.controllers', ['myApp.i18n'])
         getDraft()
       }
     })
+
+    $scope.openPictureModal = function () {
+      AppPictureManager.openPictureModal().result.then(function (data) {
+        console.log(data);
+        $scope.draftMessage.files = data;
+      })
+    }
 
     var replyToMarkup = false
     var forceDraft = false
@@ -2681,6 +2688,16 @@ angular.module('myApp.controllers', ['myApp.i18n'])
     }
 
     function onFilesSelected (newVal) {
+      if (newVal instanceof Blob) {
+        AppMessagesManager.sendFile($scope.curDialog.peerID, newVal, {
+          replyToMsgID: $scope.draftMessage.replyToMsgID,
+          isMedia: $scope.draftMessage.isMedia
+        })
+        $scope.$broadcast('ui_message_send')
+        fwdsSend()
+        return;
+      }
+
       if (!angular.isArray(newVal) || !newVal.length) {
         return
       }
@@ -3191,6 +3208,36 @@ angular.module('myApp.controllers', ['myApp.i18n'])
 
     $scope.download = function () {
       AppPhotosManager.downloadPhoto($scope.photoID)
+    }
+  })
+  
+  .controller('PictureModalController', function ($q, $scope, $rootScope, $modalInstance, MtpApiManager, AppPhotosManager, AppChatsManager,  ErrorService) {
+    $scope.capture = null;
+
+    function dataURItoBlob(dataURI) {
+      // convert base64/URLEncoded data component to raw binary data held in a string
+      var byteString;
+      if (dataURI.split(',')[0].indexOf('base64') >= 0)
+        byteString = atob(dataURI.split(',')[1]);
+      else
+        byteString = unescape(dataURI.split(',')[1]);
+
+      // separate out the mime component
+      var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+      // write the bytes of the string to a typed array
+      var ia = new Uint8Array(byteString.length);
+      for (var i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+      }
+
+      return new Blob([ia], {type:mimeString});
+    }
+
+    $scope.upload = function () {
+      if ($scope.capture){
+        $scope.$close(dataURItoBlob($scope.capture));
+      }
     }
   })
 
