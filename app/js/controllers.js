@@ -2691,7 +2691,7 @@ angular.module('myApp.controllers', ['myApp.i18n'])
       if (newVal instanceof Blob) {
         AppMessagesManager.sendFile($scope.curDialog.peerID, newVal, {
           replyToMsgID: $scope.draftMessage.replyToMsgID,
-          isMedia: $scope.draftMessage.isMedia
+          isMedia: true
         })
         $scope.$broadcast('ui_message_send')
         fwdsSend()
